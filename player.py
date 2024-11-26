@@ -5,7 +5,7 @@ from constants import *
 class Player(CircleShape):
     def __init__(self, x, y, radius=PLAYER_RADIUS):
         super().__init__(x, y, radius)
-        self.rotation = 0
+        self.rotation = 180
 
     # in the player class
 
@@ -25,6 +25,10 @@ class Player(CircleShape):
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
 
+    def move(self, dt):
+        forward = pygame.Vector2(0, 1).rotate(self.rotation)
+        self.position += forward * PLAYER_SPEED * dt
+
     def update(self, dt):
         keys = pygame.key.get_pressed()
 
@@ -36,3 +40,11 @@ class Player(CircleShape):
             print("d pressed ", dt)
             self.rotate(dt)
             # ?
+
+        if keys[pygame.K_w]:
+            print("d pressed ", dt)
+            self.move(dt)
+
+        if keys[pygame.K_s]:
+            print("d pressed ", dt)
+            self.move(-dt)
