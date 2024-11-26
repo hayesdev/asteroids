@@ -1,7 +1,7 @@
 import pygame
 # import constants
 from constants import *
-from player import Player
+from player import *
 
 
 def main():
@@ -17,14 +17,17 @@ def main():
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
     player = Player(x, y)
+
     running = True
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return
+                return False
+
         # fill() expects a tuple so be sure to use ()
         screen.fill((0, 0, 0))
+        player.update(dt)
         player.draw(screen)
         pygame.display.flip()
         dt = clock.tick(60) / 1000
