@@ -1,14 +1,15 @@
 from circleshape import *
 from constants import *
+from shot import *
 
 
 class Player(CircleShape):
     def __init__(self, x, y, radius=PLAYER_RADIUS):
         super().__init__(x, y, radius)
         self.rotation = 180
+        self.angle = 180
 
     # in the player class
-
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(
@@ -24,6 +25,9 @@ class Player(CircleShape):
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
+        self.angle += PLAYER_TURN_SPEED * dt
+        # keeping angle within 0 to 360
+        self.angle %= 360
 
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -33,18 +37,31 @@ class Player(CircleShape):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
-            print("a pressed ", dt)
+            # print("a pressed ", dt)
             self.rotate(-dt)
             # ?
+
         if keys[pygame.K_d]:
-            print("d pressed ", dt)
+            # print("d pressed ", dt)
             self.rotate(dt)
             # ?
 
         if keys[pygame.K_w]:
-            print("d pressed ", dt)
+            # print("d pressed ", dt)
             self.move(dt)
 
         if keys[pygame.K_s]:
-            print("d pressed ", dt)
+            # print("d pressed ", dt)
             self.move(-dt)
+
+        if keys[pygame.K_SPACE]:
+            # print("spacebar pressed ", dt)
+            self.shoot()
+
+    def shoot(self):
+        shot = Shot(self.position.x, self.position.y, SHOT_RADIUS)
+        # self.angle gets set separately but can possibly be removed
+        # as its value mirrors self.rotation
+        direction_vector = pygame.Vector2(0, 1).rotate(self.angle)
+        direction_vector *= PLAYER_SHOOT_SPEED
+        shot.velocity = direction_vector
