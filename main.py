@@ -64,7 +64,14 @@ def main():
         for obj in shots:
             obj.update(dt)
 
-        # draw sprites
+        # shot collision detection
+        for asteroid in asteroids:
+            for shot in shots:
+                if shot.collides_with(asteroid):
+                    asteroid.kill()
+                    shot.kill()
+
+                    # draw sprites
         for obj in drawable:
             obj.draw(screen)
 
