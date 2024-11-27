@@ -1,5 +1,4 @@
 import pygame
-# import constants
 from constants import *
 from player import *
 from asteroid import *
@@ -11,6 +10,7 @@ def main():
     print("Screen width:", SCREEN_WIDTH)
     print("Screen height:", SCREEN_HEIGHT)
 
+    # initialize pygame
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
@@ -26,7 +26,9 @@ def main():
     # this needs to be a tuple so remember () with a comma
     AsteroidField.containers = (updatable,)
 
+    # delta time
     dt = 0
+
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
 
@@ -34,8 +36,8 @@ def main():
     player = Player(x, y)
     asteroid_field = AsteroidField()
 
+    # initialize game loop
     running = True
-
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -47,6 +49,11 @@ def main():
         # player.update(dt)
         for obj in updatable:
             obj.update(dt)
+
+        for obj in asteroids:
+            if obj.collide(player):
+                print("Game over!")
+                running = False
 
         # player.draw(screen)
         for obj in drawable:
