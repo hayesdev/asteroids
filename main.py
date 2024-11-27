@@ -38,7 +38,6 @@ def main():
     # instances
     player = Player(x, y)
     asteroid_field = AsteroidField()
-    # shot = Shot()
 
     # initialize game loop
     running = True

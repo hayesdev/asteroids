@@ -8,6 +8,7 @@ class Player(CircleShape):
         super().__init__(x, y, radius)
         self.rotation = 180
         self.angle = 180
+        self.timer = 0
 
     # in the player class
     def triangle(self):
@@ -39,12 +40,10 @@ class Player(CircleShape):
         if keys[pygame.K_a]:
             # print("a pressed ", dt)
             self.rotate(-dt)
-            # ?
 
         if keys[pygame.K_d]:
             # print("d pressed ", dt)
             self.rotate(dt)
-            # ?
 
         if keys[pygame.K_w]:
             # print("d pressed ", dt)
@@ -54,14 +53,21 @@ class Player(CircleShape):
             # print("d pressed ", dt)
             self.move(-dt)
 
-        if keys[pygame.K_SPACE]:
-            # print("spacebar pressed ", dt)
+        # shot cooldown timer
+        if self.timer < 0:
+            self.timer = 0
+
+        if self.timer > 0:
+            self.timer -= dt
+
+        if keys[pygame.K_SPACE] and self.timer <= 0:
             self.shoot()
+            print("timer, dt ", self.timer, dt)
+            self.timer = PLAYER_SHOOT_COOLDOWN
 
     def shoot(self):
         shot = Shot(self.position.x, self.position.y, SHOT_RADIUS)
-        # self.angle gets set separately but can possibly be removed
-        # as its value mirrors self.rotation
+        # self.angle gets set separately but can probably be removed bc it copies self.rotation
         direction_vector = pygame.Vector2(0, 1).rotate(self.angle)
         direction_vector *= PLAYER_SHOOT_SPEED
         shot.velocity = direction_vector
